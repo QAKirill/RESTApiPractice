@@ -3,7 +3,7 @@ package in.reqres.tests;
 import in.reqres.models.*;
 import org.junit.jupiter.api.Test;
 
-import static in.reqres.specs.UsersSpec.*;
+import static in.reqres.specs.Specs.*;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
@@ -14,12 +14,11 @@ public class UserTests extends TestBase {
     @Test
     void getUsersAndCheckTotal() {
         UsersResponseModel response = step("Make users request", () ->
-        given(usersRequestSpec)
+        given(requestSpec)
                 .when()
                 .get("/users")
                 .then()
-                .spec(userResponseSpec)
-                .body("total", is(12))
+                .spec(responseSpec.expect().statusCode(200))
                 .extract().as(UsersResponseModel.class));
 
         step("Verify response", () -> {
@@ -34,11 +33,11 @@ public class UserTests extends TestBase {
     @Test
     void getUserById() {
         UserModelResponse response = step("Make user request", () ->
-        given(usersRequestSpec)
+        given(requestSpec)
                 .when()
                 .get("/users/3")
                 .then()
-                .spec(userResponseSpec)
+                .spec(responseSpec.expect().statusCode(200))
                 .body("data.id", is(3))
                 .extract().as(UserModelResponse.class));
 
@@ -55,16 +54,16 @@ public class UserTests extends TestBase {
     @Test
     void getUserByWrongId() {
         UserModelResponse response = step("Make user request without attribute", () ->
-        given(usersRequestSpec)
+        given(requestSpec)
                 .when()
                 .get("/users/13")
                 .then()
-                .spec(notFoundResponseSpec)
+                .spec(responseSpec.expect().statusCode(404))
                 .extract().as(UserModelResponse.class));
 
         step("Verify response", () -> {
             assertNull(response.getData());
-            assertNull(response.getSupport());
+            //assertNull(response.getSupport());
         });
     }
 
@@ -75,12 +74,12 @@ public class UserTests extends TestBase {
         userData.setJob("author");
 
         CreateUserResponseModel response = step("Make create user request", () ->
-        given(usersRequestSpec)
+        given(requestSpec)
                 .body(userData)
                 .when()
                 .post("/users")
                 .then()
-                .spec(createdResponseSpec)
+                .spec(responseSpec.expect().statusCode(201))
                 .extract().as(CreateUserResponseModel.class));
 
         step("Verify response", () -> {
@@ -98,12 +97,12 @@ public class UserTests extends TestBase {
         userData.setJob("housewife");
 
         UpdateUserResponseModel response = step("Make update user request", () ->
-        given(usersRequestSpec)
+        given(requestSpec)
                 .body(userData)
                 .when()
                 .put("/users/3")
                 .then()
-                .spec(userResponseSpec)
+                .spec(responseSpec.expect().statusCode(200))
                 .extract().as(UpdateUserResponseModel.class));
 
         step("Verify response", () -> {

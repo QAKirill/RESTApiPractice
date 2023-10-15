@@ -1,5 +1,6 @@
 package in.reqres.specs;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
@@ -10,16 +11,17 @@ import static io.restassured.filter.log.LogDetail.BODY;
 import static io.restassured.filter.log.LogDetail.STATUS;
 import static io.restassured.http.ContentType.JSON;
 
-public class LoginSpec {
-    public static RequestSpecification loginRequestSpec = with().filter(withCustomTemplates())
+public class Specs {
+    public static RequestSpecification requestSpec = with().filter(withCustomTemplates())
+            .filter(new AllureRestAssured())
+            .filter(withCustomTemplates())
             .log().uri()
             .log().method()
             .log().body()
             .contentType(JSON);
 
-    public static ResponseSpecification loginResponseSpec = new ResponseSpecBuilder()
+    public static ResponseSpecification responseSpec = new ResponseSpecBuilder()
             .log(STATUS)
             .log(BODY)
-            .expectStatusCode(200)
             .build();
 }
