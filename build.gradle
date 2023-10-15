@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+    id 'io.freefair.lombok' version '6.0.0-m2'
 }
 
 group 'org.example'
@@ -9,17 +11,23 @@ repositories {
     mavenCentral()
 }
 
+def restAssuredVersion = '5.3.2',
+    allureVersion = '2.21.0'
+
 dependencies {
     testImplementation (
             'org.junit.jupiter:junit-jupiter-api:5.9.2',
-            'io.rest-assured:rest-assured:5.3.1')
+            "io.rest-assured:rest-assured:$restAssuredVersion",
+            "io.rest-assured:json-schema-validator:$restAssuredVersion",
+            "io.qameta.allure:allure-rest-assured:$allureVersion",
+            'org.slf4j:slf4j-simple:2.0.7')
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+    testCompileOnly 'org.projectlombok:lombok:1.18.30'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 test {
     useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
 }
