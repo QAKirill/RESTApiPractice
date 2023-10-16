@@ -14,12 +14,12 @@ public class UserTests extends TestBase {
     @Test
     void getUsersAndCheckTotal() {
         UsersResponseModel response = step("Make users request", () ->
-        given(requestSpec)
-                .when()
-                .get("/users")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .extract().as(UsersResponseModel.class));
+                given(requestSpec)
+                        .when()
+                        .get("/users")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .extract().as(UsersResponseModel.class));
 
         step("Verify response", () -> {
             assertEquals(1, response.getPage());
@@ -33,17 +33,17 @@ public class UserTests extends TestBase {
     @Test
     void getUserById() {
         UserModelResponse response = step("Make user request", () ->
-        given(requestSpec)
-                .when()
-                .get("/users/3")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .body("data.id", is(3))
-                .extract().as(UserModelResponse.class));
+                given(requestSpec)
+                        .when()
+                        .get("/users/3")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .body("data.id", is(3))
+                        .extract().as(UserModelResponse.class));
 
         step("Verify response", () -> {
             response
-                    .checkElement("id","3")
+                    .checkElement("id", "3")
                     .checkElement("email", "emma.wong@reqres.in")
                     .checkElement("first_name", "Emma")
                     .checkElement("last_name", "Wong")
@@ -54,12 +54,12 @@ public class UserTests extends TestBase {
     @Test
     void getUserByWrongId() {
         UserModelResponse response = step("Make user request without attribute", () ->
-        given(requestSpec)
-                .when()
-                .get("/users/13")
-                .then()
-                .spec(responseSpec.expect().statusCode(404))
-                .extract().as(UserModelResponse.class));
+                given(requestSpec)
+                        .when()
+                        .get("/users/13")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(404))
+                        .extract().as(UserModelResponse.class));
 
         step("Verify response", () -> {
             assertNull(response.getData());
@@ -74,13 +74,13 @@ public class UserTests extends TestBase {
         userData.setJob("author");
 
         CreateUserResponseModel response = step("Make create user request", () ->
-        given(requestSpec)
-                .body(userData)
-                .when()
-                .post("/users")
-                .then()
-                .spec(responseSpec.expect().statusCode(201))
-                .extract().as(CreateUserResponseModel.class));
+                given(requestSpec)
+                        .body(userData)
+                        .when()
+                        .post("/users")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(201))
+                        .extract().as(CreateUserResponseModel.class));
 
         step("Verify response", () -> {
             assertEquals("Alexander", response.getName());
@@ -97,13 +97,13 @@ public class UserTests extends TestBase {
         userData.setJob("housewife");
 
         UpdateUserResponseModel response = step("Make update user request", () ->
-        given(requestSpec)
-                .body(userData)
-                .when()
-                .put("/users/3")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .extract().as(UpdateUserResponseModel.class));
+                given(requestSpec)
+                        .body(userData)
+                        .when()
+                        .put("/users/3")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .extract().as(UpdateUserResponseModel.class));
 
         step("Verify response", () -> {
             assertEquals("Katya", response.getName());

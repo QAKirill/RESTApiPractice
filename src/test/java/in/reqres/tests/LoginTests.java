@@ -16,30 +16,30 @@ public class LoginTests extends TestBase {
     void successfulLoginTest() {
         LoginResponseModel response = step("Make login request", () ->
                 given(requestSpec)
-                .body(new LoginBodyModel().gatAuthData())
-                .when()
-                .post("/login")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .extract().as(LoginResponseModel.class));
+                        .body(new LoginBodyModel().gatAuthData())
+                        .when()
+                        .post("/login")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .extract().as(LoginResponseModel.class));
 
         step("Verify response", () ->
-        assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
+                assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
     }
 
     @Test
     void successfulLoginTestWithAllure() {
         LoginResponseModel response = step("Make login request", () ->
-            given(requestSpec)
-                .body(new LoginBodyModel().gatAuthData())
-                .when()
-                .post("/login")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .extract().as(LoginResponseModel.class));
+                given(requestSpec)
+                        .body(new LoginBodyModel().gatAuthData())
+                        .when()
+                        .post("/login")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .extract().as(LoginResponseModel.class));
 
         step("Verify response", () ->
-        assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
+                assertEquals("QpwL5tke4Pnpja7X4", response.getToken()));
     }
 
     @Test
