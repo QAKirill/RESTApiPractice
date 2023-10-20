@@ -21,12 +21,27 @@ dependencies {
             "io.rest-assured:rest-assured:$restAssuredVersion",
             "io.rest-assured:json-schema-validator:$restAssuredVersion",
             "io.qameta.allure:allure-rest-assured:$allureVersion",
+            'io.qameta.allure:allure-selenide:2.24.0',
             'org.slf4j:slf4j-simple:2.0.7')
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
     testCompileOnly 'org.projectlombok:lombok:1.18.30'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+}
+
+allure {
+    report {
+        version.set("2.24.0")
+    }
+    adapter { // отвечает за появление папочки build/allure-results
+        aspectjWeaver.set(true) //обработка аннотации @Step
+        frameworks {
+            junit5 { //название фреймворка
+                adapterVersion.set("2.24.0") //версия интеграции фреймворка и Allure
+            }
+        }
+    }
 }
 
 test {

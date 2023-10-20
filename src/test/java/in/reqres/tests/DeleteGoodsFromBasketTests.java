@@ -5,7 +5,6 @@ import in.reqres.models.HeaderModel;
 import in.reqres.models.LoginBodyModel;
 import in.reqres.models.LoginResponseModel;
 import in.reqres.pages.ProfilePage;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
