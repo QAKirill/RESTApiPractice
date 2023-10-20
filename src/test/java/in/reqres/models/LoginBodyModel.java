@@ -7,11 +7,12 @@ import lombok.Data;
 public class LoginBodyModel {
     String login, password;
 
-    public LoginBodyModel getAuthData(){
-        LoginBodyModel authData = new LoginBodyModel();
-        authData.setLogin(Credentials.login);
-        authData.setPassword(Credentials.password);
+    public LoginBodyModel() {
+        this.login = Credentials.login;
+        this.password = Credentials.password;
+    }
 
-        return authData;
+    public String getAuthData() {
+        return String.format("{\"userName\":\"%s\",\"password\":\"%s\"}", login, password);
     }
 }

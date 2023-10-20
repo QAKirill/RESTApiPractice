@@ -1,150 +1,92 @@
 package in.reqres.tests;
 
-import com.codeborne.selenide.Driver;
+import in.reqres.models.BookDataModel;
+import in.reqres.models.HeaderModel;
+import in.reqres.models.LoginBodyModel;
 import in.reqres.models.LoginResponseModel;
 import in.reqres.pages.ProfilePage;
-import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
-import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static in.reqres.specs.Specs.requestSpec;
 import static in.reqres.specs.Specs.responseSpec;
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
-import static io.restassured.http.ContentType.JSON;
-import static java.lang.String.format;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DeleteGoodsFromBasketTests extends TestBase {
-    @Test
-    void addBookToCollectionTest() throws InterruptedException {
-        String authData = "{\"userName\":\"Petrov1415\",\"password\":\"Petrov1415!\"}";
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/bookdata.csv")
+    void addBookToCollectionTest(String bookName, String isbn) {
+        HeaderModel headerModel = new HeaderModel();
+        BookDataModel book = new BookDataModel();
+        book.setName(bookName);
+        book.setIsbn(isbn);
 
         LoginResponseModel authResponse = step("Логинимся", () ->
                 given(requestSpec)
-                .body(authData)
-                .when()
-                .post("/Account/v1/Login")
-                .then()
-                .spec(responseSpec.expect().statusCode(200))
-                .extract().as(LoginResponseModel.class));
+                        .body(new LoginBodyModel().getAuthData())
+                        .when()
+                        .post("/Account/v1/Login")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(200))
+                        .extract().as(LoginResponseModel.class));
+
+        headerModel.setHeader("Authorization");
+        headerModel.setHeaderValue("Bearer " + authResponse.getToken());
+        book.setUserId(authResponse.getUserId());
 
         step("Очистка коллекции", () ->
                 given(requestSpec)
-                .header("Authorization", "Bearer " + authResponse.getToken())//path("token"))
-                .queryParams("UserId", authResponse.getUserId())//path("userId"))
-                .when()
-                .delete("/BookStore/v1/Books")
-                .then()
-                .spec(responseSpec.expect().statusCode(204)));
-
-        String isbn = "9781449365035";
-        String bookAddData = format("{\"userId\":\"%s\",\"collectionOfIsbns\":[{\"isbn\":\"%s\"}]}",
-                authResponse.getUserId() , isbn);
+                        .header(headerModel.getHeader(), headerModel.getHeaderValue())
+                        .queryParams("UserId", authResponse.getUserId())
+                        .when()
+                        .delete("/BookStore/v1/Books")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(204)));
 
         step("Добавляем одну книгу", () ->
                 given(requestSpec)
-                .header("Authorization", "Bearer " + authResponse.getToken())
-                .body(bookAddData)
-                .when()
-                .post("/BookStore/v1/Books")
-                .then()
-                .spec(responseSpec.expect().statusCode(201)));
-
-        String bookDeleteData = format("{\"userId\":\"%s\",\"isbn\":\"%s\"}",
-                authResponse.getUserId() , isbn);
+                        .header(headerModel.getHeader(), headerModel.getHeaderValue())
+                        .body(book.getAddBookData())
+                        .when()
+                        .post("/BookStore/v1/Books")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(201)));
 
         step("Удаляем книгу добавленную на предыдущем шаге", () ->
                 given(requestSpec)
-                .header("Authorization", "Bearer " + authResponse.getToken())
-                .body(bookDeleteData)
-                .when()
-                .delete("/BookStore/v1/Book")
-                .then()
-                .spec(responseSpec.expect().statusCode(204)));
+                        .header(headerModel.getHeader(), headerModel.getHeaderValue())
+                        .body(book.getDeleteBookData())
+                        .when()
+                        .delete("/BookStore/v1/Book")
+                        .then()
+                        .spec(responseSpec.expect().statusCode(204)));
 
         ProfilePage profilePage = new ProfilePage();
         profilePage.addCookies(authResponse);
 
         step("Проверяем, что книга удалена (UI)", () -> {
             profilePage.openProfilePage();
-            $(".ReactTable").shouldNotHave(text("Speaking JavaScript"));
+            $(".ReactTable").shouldNotHave(text(book.getName()));
         });
 
         step("Проверяем, что книга удалена (API)", () -> {
-            given(requestSpec)
-                    .header("Authorization", "Bearer " + authResponse.getToken())
-                    .body(bookDeleteData)
+            String response = given(requestSpec)
+                    .header(headerModel.getHeader(), headerModel.getHeaderValue())
                     .when()
-                    .post("/Account/v1/User/"+authResponse.getUserId())
+                    .get("/Account/v1/User/" + authResponse.getUserId())
                     .then()
-                    .spec(responseSpec.expect().statusCode(200));
+                    .spec(responseSpec.expect().statusCode(200))
+                    .extract().asString();
+
+            System.out.println(response);
+            assertFalse(response.contains(book.getName()));
+            assertFalse(response.contains(book.getIsbn()));
         });
-    }
-
-    @Test
-    void addBookToCollection_withDelete1Book_Test() {
-        String authData = "{\"userName\":\"testtestov31\",\"password\":\"Testtestov31_%\"}";
-
-        Response authResponse = given()
-                .log().uri()
-                .log().method()
-                .log().body()
-                .contentType(JSON)
-                .body(authData)
-                .when()
-                .post("/Account/v1/Login")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(200)
-                .extract().response();
-
-        String isbn = "9781449365035";
-        String deleteBookData = format("{\"userId\":\"%s\",\"isbn\":\"%s\"}",
-                authResponse.path("userId") , isbn);
-
-        given()
-                .log().uri()
-                .log().method()
-                .log().body()
-                .contentType(JSON)
-                .header("Authorization", "Bearer " + authResponse.path("token"))
-                .body(deleteBookData)
-                .when()
-                .delete("/BookStore/v1/Book")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(204);
-
-        String bookData = format("{\"userId\":\"%s\",\"collectionOfIsbns\":[{\"isbn\":\"%s\"}]}",
-                authResponse.path("userId") , isbn);
-
-        given()
-                .log().uri()
-                .log().method()
-                .log().body()
-                .contentType(JSON)
-                .header("Authorization", "Bearer " + authResponse.path("token"))
-                .body(bookData)
-                .when()
-                .post("/BookStore/v1/Books")
-                .then()
-                .log().status()
-                .log().body()
-                .statusCode(201);
-
-        open("/favicon.ico");
-        getWebDriver().manage().addCookie(new Cookie("userId", authResponse.path("userId")));
-        getWebDriver().manage().addCookie(new Cookie("expires", authResponse.path("expires")));
-        getWebDriver().manage().addCookie(new Cookie("token", authResponse.path("token")));
-
-        open("/profile");
-        $(".ReactTable").shouldHave(text("Speaking JavaScript"));
     }
 }

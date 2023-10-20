@@ -8,12 +8,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 
 public class TestBase {
-
     @BeforeAll
     static void beforeAll() {
         RestAssured.baseURI = "https://demoqa.com";
         RestAssured.defaultParser = Parser.JSON;
-
 
         Configuration.baseUrl = "https://demoqa.com";
         Configuration.pageLoadStrategy = "eager";
