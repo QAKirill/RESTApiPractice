@@ -16,7 +16,7 @@ public class LoginTests extends TestBase {
     void successfulLoginTest() {
         LoginResponseModel response = step("Make login request", () ->
                 given(requestSpec)
-                        .body(new LoginBodyModel().gatAuthData())
+                        .body(new LoginBodyModel().getAuthData())
                         .when()
                         .post("/login")
                         .then()
@@ -31,7 +31,7 @@ public class LoginTests extends TestBase {
     void successfulLoginTestWithAllure() {
         LoginResponseModel response = step("Make login request", () ->
                 given(requestSpec)
-                        .body(new LoginBodyModel().gatAuthData())
+                        .body(new LoginBodyModel().getAuthData())
                         .when()
                         .post("/login")
                         .then()
@@ -46,7 +46,7 @@ public class LoginTests extends TestBase {
     void successfulLoginTestWithCustomAllure() {
         LoginResponseModel response = step("Make login request", () ->
                 given(requestSpec)
-                        .body(new LoginBodyModel().gatAuthData())
+                        .body(new LoginBodyModel().getAuthData())
                         .when()
                         .post("/login")
                         .then()
@@ -61,7 +61,7 @@ public class LoginTests extends TestBase {
     void successfulLoginTestWithSpec() {
         LoginResponseModel response = step("Make login request", () ->
                 given(requestSpec)
-                        .body(new LoginBodyModel().gatAuthData())
+                        .body(new LoginBodyModel().getAuthData())
                         .when()
                         .post("/login")
                         .then()

@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 public class LoginBodyModel {
-    String email, password;
+    String login, password;
 
-    public LoginBodyModel gatAuthData(){
+    public LoginBodyModel getAuthData(){
         LoginBodyModel authData = new LoginBodyModel();
-        authData.setEmail(Credentials.email);
+        authData.setLogin(Credentials.login);
         authData.setPassword(Credentials.password);
 
         return authData;

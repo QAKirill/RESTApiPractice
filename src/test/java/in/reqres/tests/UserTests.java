@@ -44,7 +44,7 @@ public class UserTests extends TestBase {
         step("Verify response", () -> {
             response
                     .checkElement("id", "3")
-                    .checkElement("email", "emma.wong@reqres.in")
+                    .checkElement("login", "emma.wong@reqres.in")
                     .checkElement("first_name", "Emma")
                     .checkElement("last_name", "Wong")
                     .checkElement("avatar", "https://reqres.in/img/faces/3-image.jpg");
