@@ -7,11 +7,13 @@ import static java.lang.String.format;
 
 @Data
 public class BookDataModel {
-    private String userId;
+    private String title, isbn, userId;
     private final TestConfig testConfig;
 
     public BookDataModel(TestConfig testConfig){
         this.testConfig = testConfig;
+        setIsbn(testConfig.isbn());
+        setTitle(testConfig.title());
     }
 
     public String getAddBookData(){
@@ -22,13 +24,5 @@ public class BookDataModel {
     public String getDeleteBookData(){
         return format("{\"userId\":\"%s\",\"isbn\":\"%s\"}",
                 userId, testConfig.isbn());
-    }
-
-    public String getTitle(){
-        return testConfig.title();
-    }
-
-    public String getIsbn(){
-        return testConfig.isbn();
     }
 }
