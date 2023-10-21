@@ -53,7 +53,7 @@ public class DeleteGoodsFromBasketTests extends TestBase {
                         .then()
                         .spec(responseSpec.expect().statusCode(201)));
 
-        step("Удаляем книгу добавленную на предыдущем шаге", () ->
+        step("Удаляем книгу, добавленную на предыдущем шаге", () ->
                 given(requestSpec)
                         .header(headerModel.getHeader(), headerModel.getHeaderValue())
                         .body(book.getDeleteBookData())
