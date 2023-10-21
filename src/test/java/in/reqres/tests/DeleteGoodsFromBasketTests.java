@@ -7,7 +7,6 @@ import in.reqres.models.LoginResponseModel;
 import in.reqres.pages.ProfilePage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
@@ -20,13 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 public class DeleteGoodsFromBasketTests extends TestBase {
 
     @Test
-    @ParameterizedTest
-    @CsvFileSource(resources = "/bookdata.csv")
-    void addBookToCollectionTest(String bookName, String isbn) {
+    void addBookToCollectionTest() {
         HeaderModel headerModel = new HeaderModel();
-        BookDataModel book = new BookDataModel();
-        book.setName(bookName);
-        book.setIsbn(isbn);
+        BookDataModel book = new BookDataModel(testConfig);
 
         LoginResponseModel authResponse = step("Логинимся", () ->
                 given(requestSpec)
@@ -73,7 +68,7 @@ public class DeleteGoodsFromBasketTests extends TestBase {
 
         step("Проверяем, что книга удалена (UI)", () -> {
             profilePage.openProfilePage();
-            $(".ReactTable").shouldNotHave(text(book.getName()));
+            $(".ReactTable").shouldNotHave(text(book.getTitle()));
         });
 
         step("Проверяем, что книга удалена (API)", () -> {
@@ -86,7 +81,7 @@ public class DeleteGoodsFromBasketTests extends TestBase {
                     .extract().asString();
 
             System.out.println(response);
-            assertFalse(response.contains(book.getName()));
+            assertFalse(response.contains(book.getTitle()));
             assertFalse(response.contains(book.getIsbn()));
         });
     }

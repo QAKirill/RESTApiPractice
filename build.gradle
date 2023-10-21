@@ -18,6 +18,7 @@ dependencies {
     testImplementation (
             'com.codeborne:selenide:6.16.0',
             'org.junit.jupiter:junit-jupiter:5.9.3',
+            'org.aeonbits.owner:owner:1.0.12',
             "io.rest-assured:rest-assured:$restAssuredVersion",
             "io.rest-assured:json-schema-validator:$restAssuredVersion",
             "io.qameta.allure:allure-rest-assured:$allureVersion",
@@ -47,4 +48,8 @@ allure {
 test {
     systemProperties(System.getProperties())
     useJUnitPlatform()
+}
+
+tasks.withType(Test){
+    systemProperties(System.getProperties())
 }
