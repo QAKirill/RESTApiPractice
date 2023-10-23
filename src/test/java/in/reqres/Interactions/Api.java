@@ -3,12 +3,10 @@ package in.reqres.Interactions;
 import in.reqres.models.BookDataModel;
 import in.reqres.models.LoginBodyModel;
 import in.reqres.models.LoginResponseModel;
-import in.reqres.pages.ProfilePage;
 import io.qameta.allure.Step;
 
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static in.reqres.pages.BookStoreApi.*;
+import static in.reqres.pages.BookStoreApi.bookEndpoint;
+import static in.reqres.pages.BookStoreApi.booksEndpoint;
 import static in.reqres.specs.Specs.requestSpec;
 import static in.reqres.specs.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
