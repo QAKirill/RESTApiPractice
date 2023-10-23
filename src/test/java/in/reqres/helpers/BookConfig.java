@@ -2,9 +2,9 @@ package in.reqres.helpers;
 
 import org.aeonbits.owner.Config;
 
-@Config.Sources({"classpath:${env}.properties"})
+@Config.Sources({"classpath:book.properties"})
 
-public interface TestConfig extends Config {
+public interface BookConfig extends Config {
     @Key("title")
     @DefaultValue("Speaking JavaScript")
     String title();

@@ -1,28 +1,28 @@
 package in.reqres.models;
 
-import in.reqres.helpers.TestConfig;
+import in.reqres.helpers.BookConfig;
+import in.reqres.helpers.ConfigReader;
 import lombok.Data;
 
 import static java.lang.String.format;
 
 @Data
 public class BookDataModel {
-    private String title, isbn, userId;
-    private final TestConfig testConfig;
+    private String title, isbn;
+    private final BookConfig bookConfig = ConfigReader.INSTANCE.read();
 
-    public BookDataModel(TestConfig testConfig){
-        this.testConfig = testConfig;
-        setIsbn(testConfig.isbn());
-        setTitle(testConfig.title());
+    public BookDataModel(){
+        setIsbn(bookConfig.isbn());
+        setTitle(bookConfig.title());
     }
 
-    public String getAddBookData(){
+    public String getAddBookData(String userId){
         return format("{\"userId\":\"%s\",\"collectionOfIsbns\":[{\"isbn\":\"%s\"}]}",
-                userId, testConfig.isbn());
+                userId, bookConfig.isbn());
     }
 
-    public String getDeleteBookData(){
+    public String getDeleteBookData(String userId){
         return format("{\"userId\":\"%s\",\"isbn\":\"%s\"}",
-                userId, testConfig.isbn());
+                userId, bookConfig.isbn());
     }
 }

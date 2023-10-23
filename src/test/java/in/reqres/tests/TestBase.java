@@ -4,8 +4,6 @@ import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import in.reqres.helpers.Attach;
-import in.reqres.helpers.ConfigReader;
-import in.reqres.helpers.TestConfig;
 import io.qameta.allure.selenide.AllureSelenide;
 import io.restassured.RestAssured;
 import io.restassured.parsing.Parser;
@@ -17,8 +15,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.util.Map;
 
 public class TestBase {
-    protected static final TestConfig testConfig = ConfigReader.INSTANCE.read();
-
     @BeforeAll
     static void beforeAll() {
         RestAssured.baseURI = "https://demoqa.com";
