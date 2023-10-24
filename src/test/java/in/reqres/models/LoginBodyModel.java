@@ -1,17 +1,21 @@
 package in.reqres.models;
 
-import in.reqres.helpers.Credentials;
+import in.reqres.helpers.ConfigReader;
+import in.reqres.helpers.LoginConfig;
 import lombok.Data;
 
 @Data
 public class LoginBodyModel {
-    String email, password;
+    String login, password, loginPage;
+    private final LoginConfig loginConfig = ConfigReader.INSTANCE.getCredentials();
 
-    public LoginBodyModel gatAuthData(){
-        LoginBodyModel authData = new LoginBodyModel();
-        authData.setEmail(Credentials.email);
-        authData.setPassword(Credentials.password);
+    public LoginBodyModel() {
+        this.login = loginConfig.login();
+        this.password = loginConfig.password();
+        this.loginPage = loginConfig.loginPage();
+    }
 
-        return authData;
+    public String getAuthData() {
+        return String.format("{\"userName\":\"%s\",\"password\":\"%s\"}", login, password);
     }
 }
