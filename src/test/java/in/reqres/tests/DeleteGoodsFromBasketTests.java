@@ -1,7 +1,7 @@
 package in.reqres.tests;
 
-import in.reqres.Interactions.Api;
-import in.reqres.Interactions.Ui;
+import in.reqres.methods.StepsApi;
+import in.reqres.methods.StepsUi;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,7 +10,7 @@ public class DeleteGoodsFromBasketTests extends TestBase {
 
     @Test
     void addBookToCollectionTest() {
-        Api authResponse = new Api();
+        StepsApi authResponse = new StepsApi();
 
         authResponse
                 .login()
@@ -18,7 +18,7 @@ public class DeleteGoodsFromBasketTests extends TestBase {
                 .addBook()
                 .deleteBook();
 
-        assertFalse(new Ui().isBookPresent(authResponse.getAuthResponse(), authResponse.getBook().getTitle()));
+        assertFalse(new StepsUi().isBookPresent(authResponse.getAuthResponse(), authResponse.getBook().getTitle()));
 
         String checkBookResult = authResponse.isBookPresentByAPI();
         assertFalse(checkBookResult.contains(authResponse.getBook().getTitle()));

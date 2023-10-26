@@ -1,4 +1,4 @@
-package in.reqres.Interactions;
+package in.reqres.methods;
 
 import in.reqres.models.BookDataModel;
 import in.reqres.models.LoginBodyModel;
@@ -11,7 +11,7 @@ import static in.reqres.specs.Specs.requestSpec;
 import static in.reqres.specs.Specs.responseSpec;
 import static io.restassured.RestAssured.given;
 
-public class Api {
+public class StepsApi {
     private LoginResponseModel authResponse;
 
     public LoginResponseModel getAuthResponse() {
@@ -26,7 +26,7 @@ public class Api {
     }
 
     @Step("Логинимся")
-    public Api login(){
+    public StepsApi login(){
         authResponse = given(requestSpec)
                 .body(loginBodyModel.getAuthData())
                 .when()
@@ -40,7 +40,7 @@ public class Api {
     }
 
     @Step("Очистка коллекции книг")
-    public Api deleteAllBooks(){
+    public StepsApi deleteAllBooks(){
         given(requestSpec)
                 .header(authResponse.getHeader(), authResponse.getHeaderValue())
                 .queryParams("UserId", authResponse.getUserId())
@@ -53,7 +53,7 @@ public class Api {
     }
 
     @Step("Удаляем книгу")
-    public Api deleteBook(){
+    public StepsApi deleteBook(){
         given(requestSpec)
                 .header(authResponse.getHeader(), authResponse.getHeaderValue())
                 .body(book.getDeleteBookData(authResponse.getUserId()))
@@ -66,7 +66,7 @@ public class Api {
     }
 
     @Step("Добавляем книгу")
-    public Api addBook(){
+    public StepsApi addBook(){
         given(requestSpec)
                 .header(authResponse.getHeader(), authResponse.getHeaderValue())
                 .body(book.getAddBookData(authResponse.getUserId()))
