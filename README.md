@@ -32,89 +32,81 @@
 <img width="6%" title="Telegram" src="attach/Logo/Telegram.svg">
 </p>
 
-В данном проекте автотесты написаны на **Java**. Для сборки проекта в
-среде IntelliJ IDEA используется **Gradle**. **JUnit 5** задействован в качестве фреймворка модульного тестирования, а
-**RestAssured** используется для тестирования API.
-Запуск тестов выполняется из **Jenkins**, и вся работа по управлению проектом и отслеживанию задач выполняется с
-использованием **Jira**. **Allure Report**, **AllureTestOps** и **Telegram Bot** используются для визуализации
-результатов тестирования.
+- В данном проекте автотесты написаны на языке <code>Java</code> с использованием фреймворка для тестирования Selenide. 
+- В качестве сборщика был использован - <code>Gradle</code>.  
+- Использованы фреймворки <code>JUnit 5</code> и [Selenide](https://selenide.org/).
+- При прогоне тестов браузер запускается в [Selenoid](https://aerokube.com/selenoid/).
+- Для удаленного запуска реализована джоба в <code>Jenkins</code> с формированием Allure-отчета и отправкой результатов в <code>Telegram</code> при помощи бота. 
+- Осуществлена интеграция с <code>Allure TestOps</code>
 
-<a id="запуск-тестов-сборка-в-jenkins"></a>
+Содержание Allure-отчета:
+* Шаги теста;
+* Логи HTTP запросов
+* Скриншот страницы на последнем шаге (только для Ui тестов);
+* Page Source (только для Ui тестов);
+* Логи браузерной консоли (только для Ui тестов);
+* Видео выполнения автотеста (только для Ui тестов).
 
-## <img alt="Jenkins" height="25" src="images/logo/Jenkins.svg" width="25"/> Сборка в [Jenkins](https://jenkins.autotests.cloud/job/reqresin-product-autotests/)
+## :arrow_forward: Запуск автотестов
 
-<p align="center">  
-<img src="images/screen/JenkinsMain.png" alt="Jenkins" width="950"/></a>  
-</p>
-
-## 📋 Параметры сборки в Jenkins:
-
-- _TASK (Задачи, по умолчанию Smoke_test)_
-
-<a id="запуск-тестов-из-терминала"></a>
-
-## 🚀 Команда для запуска автотестов из терминала
-
-```bash  
-gradle clean test 
+### Запуск тестов из терминала
+Demoqa.com тест
+```
+gradle clean demoqa_test
 ```
 
-<a id="allure-report"></a>
+Reqres.in тест
+```
+gradle clean reqres_test
+```
+  
+Также можно переопределить параметры запуска:
+```
+clean
+${TESTS}_test
+-Dbrowser=${BROWSER}
+-DbrowserVersion=${BROWSER_VERSION}
+-DbrowserSize=${BROWSER_SIZE}
+-DremoteDriverUrl=${REMOTE_DRIVER_URL}/wd/hub
+```
 
-## <img alt="Allure" height="25" src="images/logo/Allure.svg" width="25"/> </a>Интеграция с <a target="_blank" href="https://jenkins.autotests.cloud/job/reqresin-product-autotests/allure/">Allure Report</a>
+## <img name="jenkins" src="attach/Logo/Jenkins.svg" title="Jenkins" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-TinkoffWebTests" target="blank">Сборка в Jenkins</a>
 
-## 🖨️ Основная страница отчёта
+### Параметры сборки
 
-<p align="center">  
-<img title="Allure Overview Dashboard" src="images/screen/AlMain.png" width="850">  
-</p>  
+* <code>BROWSER</code> – браузер, в котором будут выполняться тесты. По-умолчанию - <code>chrome</code>.
+* <code>BROWSER_VERSION</code> – версия браузера, в которой будут выполняться тесты. По-умолчанию - <code>100.0</code>.
+* <code>BROWSER_SIZE</code> – размер окна браузера, в котором будут выполняться тесты. По-умолчанию - <code>1920x1080</code>.
+* <code>TESTS</code> – Набор тестов для Demoqa.com или Reqres.in.
 
-## 📄 Тест-кейсы
+## <img name="allure" src="attach/Logo/Allure_Report.svg" title="Allure Report" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-TinkoffWebTests/3/allure" target="_blank">Пример Allure-отчета</a>
 
-<p align="center">  
-<img title="Allure Tests" src="images/screen/AlCases.png" width="850">   
+### Overview
+
+<p align="center">
+<img title="Allure Overview" src="attach/Reports/allureReport.png">
 </p>
 
-## 📊 Графики
+### Результат выполнения теста
 
-<p align="center">   
-<img title="Allure Graphics1" src="images/screen/AlGraph1.png" width="850">  
-<img title="Allure Graphics2" src="images/screen/AlGraph2.png" width="850">  
+<p align="center">
+<img title="Test Results in Alure" src="attach/Reports/ResultTest.png">
 </p>
 
-<a id="интеграция-с-allure-testops"></a>
+## <img src="attach/Logo/AllureTestOps.svg" title="Allure TestOps" width="4%"/> <a href="https://allure.autotests.cloud/launch/30934" target="_blank">Интеграция с Allure TestOps</a>
 
-## <img alt="Allure_TO" height="25" src="images/logo/Allure_TO.svg" width="25"/> </a>Интеграция с <a target="_blank" href="https://allure.autotests.cloud/project/3737/dashboards">Allure TestOps</a>
+Выполнена интеграция сборки <code>Jenkins</code> с <code>Allure TestOps</code>.
+Результат выполнения автотестов отображается в <code>Allure TestOps</code>
+На Dashboard в <code>Allure TestOps</code> отображена статистика пройденных тестов.
 
-## 🖨️ Основная страница отчёта
-
-<p align="center">  
-<img title="Allure TestOps Dashboard" src="images/screen/OpsDashboard.png" width="850">  
-</p>  
-
-## 📄 Автоматизированные тест-кейсы
-
-<p align="center">  
-<img title="Allure Tests" src="images/screen/OpsTestCases.png" width="850">  
+<p align="center">
+<img title="Allure TestOps DashBoard" src="attach/Reports/allureAutotestCloud.png">
 </p>
 
-<a id="интеграция-с-jira"></a>
+## <img name="telega" width="4%" style="vertical-align:middle" title="Telegram" src="attach/Logo/Telegram.svg"> Уведомления в Telegram с использованием бота
 
-## <img alt="Allure" height="25" src="images/logo/Jira.svg" width="25"/></a> Интеграция с <a target="_blank" href="https://jira.autotests.cloud/browse/HOMEWORK-922">Jira</a>
+После завершения сборки, бот созданный в <code>Telegram</code>, автоматически обрабатывает и отправляет сообщение с результатом.
 
-<p align="center">  
-<img title="Jira" src="images/screen/JiraMain.png" width="">  
+<p align="center">
+<img width="70%" title="Telegram Notifications" src="attach/Reports/notification.jpg">
 </p>
-
-____
-
-<a id="уведомление-в-telegram-о-результатах-выполнения-автоматизированных-тестов"></a>
-
-## <img alt="Allure" height="25" src="images/logo/Telegram.svg" width="25"/></a> Уведомление в Telegram при помощи бота
-
-____
-<p align="center">  
-<img title="TG Overview" src="images/screen/TGMain.png" width="550">  
-</p>
-
-____
