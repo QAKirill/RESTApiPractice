@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class DemoQATests extends TestBase {
@@ -29,7 +30,8 @@ public class DemoQATests extends TestBase {
         assertFalse(new StepsUi().isBookPresent(authResponse.getAuthResponse(), authResponse.getBook().getTitle()));
 
         String checkBookResult = authResponse.isBookPresentByAPI();
-        assertFalse(checkBookResult.contains(authResponse.getBook().getTitle()));
-        assertFalse(checkBookResult.contains(authResponse.getBook().getIsbn()));
+        assertAll("Grouped Assertions of response params",
+                () -> assertFalse(checkBookResult.contains(authResponse.getBook().getTitle())),
+                () -> assertFalse(checkBookResult.contains(authResponse.getBook().getIsbn())));
     }
 }
