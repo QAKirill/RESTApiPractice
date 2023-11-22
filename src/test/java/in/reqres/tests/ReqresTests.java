@@ -74,8 +74,9 @@ public class ReqresTests extends TestBaseReqres {
                         .extract().as(UserModelResponse.class));
 
         step("Verify response", () -> {
-            assertNull(response.getData());
-            assertNull(response.getSupport());
+            assertAll("Grouped Assertions of response params",
+                    () -> assertNull(response.getData()),
+                    () -> assertNull(response.getSupport()));
         });
     }
 
