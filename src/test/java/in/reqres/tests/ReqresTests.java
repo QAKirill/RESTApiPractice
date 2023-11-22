@@ -1,12 +1,15 @@
 package in.reqres.tests;
 
+import in.reqres.endpoints.Endpoints;
 import in.reqres.models.*;
+import in.reqres.pages.UserResponseData;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import static in.reqres.endpoints.Endpoints.usersEndpoint;
 import static in.reqres.specs.Specs.requestSpec;
 import static in.reqres.specs.Specs.responseSpec;
 import static io.qameta.allure.Allure.step;
@@ -20,25 +23,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Tag("Reqres")
 public class ReqresTests extends TestBaseReqres {
 
+    Endpoints endpoints = new Endpoints();
+
     @Test
     @DisplayName("Проверка списка пользователей")
     void getUsersAndCheckTotal() {
         UsersResponseModel response = step("Make users request", () ->
                 given(requestSpec)
                         .when()
-                        .get("/users")
+                        .get(usersEndpoint)
                         .then()
                         .spec(responseSpec.expect().statusCode(200))
                         .extract().as(UsersResponseModel.class));
 
         step("Verify response", () -> {
-            assertEquals(1, response.getPage());
-            assertEquals(6, response.getPerPage());
-            assertEquals(12, response.getTotal());
-            assertEquals(2, response.getTotalPages());
+            assertAll("Grouped Assertions of response params",
+                    () -> assertEquals(1, response.getPage()),
+                    () -> assertEquals(6, response.getPerPage()),
+                    () -> assertEquals(12, response.getTotal()),
+                    () -> assertEquals(2, response.getTotalPages()));
         });
     }
-
 
     @Test
     @DisplayName("Проверка полей конкретного пользователя")
@@ -46,19 +51,14 @@ public class ReqresTests extends TestBaseReqres {
         UserModelResponse response = step("Make user request", () ->
                 given(requestSpec)
                         .when()
-                        .get("/users/3")
+                        .get(endpoints.usersEndpointId, 3)
                         .then()
                         .spec(responseSpec.expect().statusCode(200))
                         .body("data.id", is(3))
                         .extract().as(UserModelResponse.class));
 
         step("Verify response", () -> {
-            response
-                    .checkElement("id","3")
-                    .checkElement("email", "emma.wong@reqres.in")
-                    .checkElement("first_name", "Emma")
-                    .checkElement("last_name", "Wong")
-                    .checkElement("avatar", "https://reqres.in/img/faces/3-image.jpg");
+            assertEquals(response.getData(), new UserResponseData().getData());
         });
     }
 
@@ -68,7 +68,7 @@ public class ReqresTests extends TestBaseReqres {
         UserModelResponse response = step("Make user request without attribute", () ->
                 given(requestSpec)
                         .when()
-                        .get("/users/13")
+                        .get(endpoints.usersEndpointId, 13)
                         .then()
                         .spec(responseSpec.expect().statusCode(404))
                         .extract().as(UserModelResponse.class));
@@ -90,16 +90,17 @@ public class ReqresTests extends TestBaseReqres {
                 given(requestSpec)
                         .body(userData)
                         .when()
-                        .post("/users")
+                        .post(usersEndpoint)
                         .then()
                         .spec(responseSpec.expect().statusCode(201))
                         .extract().as(CreateUserResponseModel.class));
 
         step("Verify response", () -> {
-            assertEquals("Alexander", response.getName());
-            assertEquals("author", response.getJob());
-            assertNotNull(response.getId());
-            assertNotNull(response.getCreatedAt());
+            assertAll("Grouped Assertions of response params",
+                    () -> assertEquals("Alexander", response.getName()),
+                    () -> assertEquals("author", response.getJob()),
+                    () -> assertNotNull(response.getId()),
+                    () -> assertNotNull(response.getCreatedAt()));
         });
     }
 
@@ -114,15 +115,16 @@ public class ReqresTests extends TestBaseReqres {
                 given(requestSpec)
                         .body(userData)
                         .when()
-                        .put("/users/3")
+                        .put(endpoints.usersEndpointId, 3)
                         .then()
                         .spec(responseSpec.expect().statusCode(200))
                         .extract().as(UpdateUserResponseModel.class));
 
         step("Verify response", () -> {
-            assertEquals("Katya", response.getName());
-            assertEquals("housewife", response.getJob());
-            assertNotNull(response.getUpdatedAt());
+            assertAll("Grouped Assertions of response params",
+                    () -> assertEquals("Katya", response.getName()),
+                    () -> assertEquals("housewife", response.getJob()),
+                    () -> assertNotNull(response.getUpdatedAt()));
         });
     }
 }
