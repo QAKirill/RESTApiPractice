@@ -19,6 +19,7 @@ public class StepsApi {
     }
 
     BookDataModel book = new BookDataModel();
+    BookBodybuilder bodybuilder = new BookBodybuilder();
     LoginBodyModel loginBodyModel = new LoginBodyModel();
 
     public BookDataModel getBook() {
@@ -56,7 +57,7 @@ public class StepsApi {
     public StepsApi deleteBook(){
         given(requestSpec)
                 .header(authResponse.getHeader(), authResponse.getHeaderValue())
-                .body(book.getDeleteBookData(authResponse.getUserId()))
+                .body(bodybuilder.getDeleteBookData(authResponse.getUserId(), book.getIsbn()))
                 .when()
                 .delete(bookEndpoint)
                 .then()
@@ -69,7 +70,7 @@ public class StepsApi {
     public StepsApi addBook(){
         given(requestSpec)
                 .header(authResponse.getHeader(), authResponse.getHeaderValue())
-                .body(book.getAddBookData(authResponse.getUserId()))
+                .body(bodybuilder.getAddBookData(authResponse.getUserId(), book.getIsbn()))
                 .when()
                 .post(booksEndpoint)
                 .then()
