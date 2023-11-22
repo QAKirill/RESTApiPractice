@@ -68,7 +68,7 @@ ${TESTS}_test
 -DremoteDriverUrl=${REMOTE_DRIVER_URL}/wd/hub
 ```
 
-## <img name="jenkins" src="attach/Logo/Jenkins.svg" title="Jenkins" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-TinkoffWebTests" target="blank">Сборка в Jenkins</a>
+## <img name="jenkins" src="attach/Logo/Jenkins.svg" title="Jenkins" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-RestApiAdvanced/" target="blank">Сборка в Jenkins</a>
 
 ### Параметры сборки
 
@@ -77,7 +77,7 @@ ${TESTS}_test
 * <code>BROWSER_SIZE</code> – размер окна браузера, в котором будут выполняться тесты. По-умолчанию - <code>1920x1080</code>.
 * <code>TESTS</code> – Набор тестов для Demoqa.com или Reqres.in.
 
-## <img name="allure" src="attach/Logo/Allure_Report.svg" title="Allure Report" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-TinkoffWebTests/3/allure" target="_blank">Пример Allure-отчета</a>
+## <img name="allure" src="attach/Logo/Allure_Report.svg" title="Allure Report" width="4%"/> <a href="https://jenkins.autotests.cloud/job/21-Yejik-java-RestApiAdvanced/9/allure/" target="_blank">Пример Allure-отчета</a>
 
 ### Overview
 
@@ -91,7 +91,7 @@ ${TESTS}_test
 <img title="Test Results in Alure" src="attach/Reports/ResultTest.png">
 </p>
 
-## <img src="attach/Logo/AllureTestOps.svg" title="Allure TestOps" width="4%"/> <a href="https://allure.autotests.cloud/launch/30934" target="_blank">Интеграция с Allure TestOps</a>
+## <img src="attach/Logo/AllureTestOps.svg" title="Allure TestOps" width="4%"/> <a href="https://allure.autotests.cloud/jobrun/31294" target="_blank">Интеграция с Allure TestOps</a>
 
 Выполнена интеграция сборки <code>Jenkins</code> с <code>Allure TestOps</code>.
 Результат выполнения автотестов отображается в <code>Allure TestOps</code>
